@@ -1,4 +1,5 @@
 # import Bio
+import argparse
 from Bio.Seq import Seq
 # from Bio.SeqUtils import GC
 # The function GC was part of the Bio.SeqUtils module in older versions of Biopython. 
@@ -18,18 +19,47 @@ def validate_dna_sequence(sequence):
         raise ValueError("Invalid DNA sequence. Only A, G, C, T allowed.")
     return sequence.upper()
 
+def analyze_dna_sequence(file_path):
+    # Analysis function using biopython
+    try:
+        # Use SeqIO to support formats such as FASTA
+        # Use parse to check file for multiple lines
+        for record in SeqIO.parse(file_path, "fasta"):
+            sequence = validate_dna_sequence(record.seq)
+
+        stats = {
+            'Sequence ID': record.id,
+            'Sequence Length': len(sequence)
+        }
+        return stats
+    
+    except FileNotFoundError:
+        print(f"Error: File '{file_path} not found.")
+
 def read_dna_sequence(file_path):
     with open(file_path, 'r') as file:
         sequence = file.read().strip()
     return sequence
 
-def main(file_path):
-    sequence = read_dna_sequence(file_path)
-    validate_dna_sequence(sequence)
-    print(f"Sequence: {sequence}")
+def print_results(stats):
+    print("DNA SEQUENCE ANALYSIS RESULTS")
+    print(f"Sequence ID: {stats['Sequence ID']}")
+
+# def main(file_path):
+
+    # sequence = read_dna_sequence(file_path)
+    # validate_dna_sequence(sequence)
+    # analyze_dna_sequence(file_path)
+    # print(f"Sequence: {sequence}")
+    
 
 if __name__ == "__main__":
-
-    file_path = "sequence.txt"
-
-    main(file_path)
+    parser = argparse.ArgumentParser(description='DNA Sequencer with Biopython')
+    parser.add_argument('file', help='Path to the DNA Seq file (FASTA format)')
+    args = parser.parse_args()
+    
+    stats = analyze_dna_sequence(args.file)
+    # file_path = "sequence.txt"
+    # file_path = "chromosome 11.fasta"
+    print_results(stats)
+    #main(file_path)
