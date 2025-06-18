@@ -1,4 +1,4 @@
-# bioinformatics-dna-sequencerA
+# bioinformatics-dna-sequencer
 Python tool to generate dna sequence data.
 1. Validate a DNA sequence from a file.
 2. Calculate:
