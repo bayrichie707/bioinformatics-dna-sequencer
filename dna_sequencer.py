@@ -29,7 +29,8 @@ def analyze_dna_sequence(file_path):
 
         stats = {
             'Sequence ID': record.id,
-            'Sequence Length': len(sequence)
+            'Sequence Length': len(sequence),
+            'GC Ratio': gc_fraction(sequence) * 100
         }
         return stats
     
@@ -44,6 +45,8 @@ def read_dna_sequence(file_path):
 def print_results(stats):
     print("DNA SEQUENCE ANALYSIS RESULTS")
     print(f"Sequence ID: {stats['Sequence ID']}")
+    print(f"Sequence Length: {stats['Sequence Length']}")
+    print(f"GC Ratio: {stats['GC Ratio']:.2f}%")
 
 # def main(file_path):
 
