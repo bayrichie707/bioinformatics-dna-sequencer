@@ -32,10 +32,30 @@ def analyze_dna_sequence(file_path):
             'Sequence Length': len(sequence),
             'GC Ratio': gc_fraction(sequence) * 100
         }
+
+        # Call find_motifs of specific length. Return dictionary of motifs with more than one occurence.
+        motifs = find_motifs(sequence, 3)
+        stats['Motifs (length = 3)'] = motifs
+
         return stats
     
     except FileNotFoundError:
         print(f"Error: File '{file_path} not found.")
+
+def find_motifs(sequence, motif_length):
+    # Count occurrenes of motifs
+    motifs = {}
+    for i in range(len(sequence) - motif_length + 1):
+        # Build the dictionary and store all substrings of length 4 from the sequence 
+        motif = str(sequence[i : i + motif_length])
+        # Count how many times motif (ATG, TGC) appears. If 0 then increment by 1
+        motifs[motif] = motifs.get(motif, 0) + 1
+    
+    # Only return motifs that are greater than one
+    return {motif: count for motif, count in motifs.items() if count > 1}
+
+
+
 
 def read_dna_sequence(file_path):
     with open(file_path, 'r') as file:
@@ -47,6 +67,15 @@ def print_results(stats):
     print(f"Sequence ID: {stats['Sequence ID']}")
     print(f"Sequence Length: {stats['Sequence Length']}")
     print(f"GC Ratio: {stats['GC Ratio']:.2f}%")
+    print("***Motifs (length = 3)***")
+    motifs = stats['Motifs (length = 3)']
+    if motifs:
+        for motif, count in motifs.items():
+            print(f"  {motif}: {count} times")
+    else:
+        print("  None found.")
+
+    # print(motifs)
 
 # def main(file_path):
 
