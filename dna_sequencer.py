@@ -30,7 +30,8 @@ def analyze_dna_sequence(file_path):
         stats = {
             'Sequence ID': record.id,
             'Sequence Length': len(sequence),
-            'GC Ratio': gc_fraction(sequence) * 100
+            'GC Ratio': gc_fraction(sequence) * 100,
+            'Nucleotide Frequency': dict(Counter(str(sequence)))
         }
 
         # Call find_motifs of specific length. Return dictionary of motifs with more than one occurence.
@@ -67,6 +68,11 @@ def print_results(stats):
     print(f"Sequence ID: {stats['Sequence ID']}")
     print(f"Sequence Length: {stats['Sequence Length']}")
     print(f"GC Ratio: {stats['GC Ratio']:.2f}%")
+    
+    print("***Nucleotide Frequency***")
+    for nucleotide, count in stats['Nucleotide Frequency'].items():
+        print(f"{nucleotide} : {count}")
+
     print("***Motifs (length = 3)***")
     motifs = stats['Motifs (length = 3)']
     if motifs:
